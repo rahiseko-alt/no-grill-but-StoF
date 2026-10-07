@@ -29,22 +29,14 @@ This repo may be driven by a non-engineer. Never assume the user knows which sla
 
 ### Starting new work, or adding a feature to an existing codebase
 
-`/grill-with-docs` -> `/conduct`
+Talk it through in the conversation -> `/conduct`
 
-`/conduct` (repo-local, `.claude/skills/conduct/`) runs everything after the first conversation without asking the user anything except at the mid-point check and the final check: spec, design review, tickets, implementation, final review, fixes, and merge on GO. Each stage is handed to an assignee (tool + model) picked by the router (`.claude/router/route.sh`) from the role table (`.claude/router/roles.txt`). Swapping models means editing only that table. When Codex and Gemini are unavailable it continues in solo mode with Claude and records the other vendors' reviews as `deferred-review` issues for later.
+There is no interview skill. The user describes what they want in plain words; once it is settled, `/conduct` takes over.
 
-The manual path still works: `/grill-with-docs` -> `/to-spec` (when a spec is warranted) -> `/to-tickets` -> `/implement`
+`/conduct` (repo-local, `.claude/skills/conduct/`) runs everything after that conversation without asking the user anything except at the mid-point check and the final check: recording vocabulary and decisions, spec, design review, tickets, implementation, final review, fixes, and merge on GO. Claude does every stage itself in this session; reviews run in fresh sub-agents so they do not inherit the author's assumptions.
 
-`/grill-with-docs` is the single entry point, whether or not code exists yet. It drives both `/grilling` and
-`/domain-modeling`, so the vocabulary and the decisions land in `CONTEXT.md` and `docs/adr/` instead of
-evaporating with the session. Those files are created lazily, so there is nothing to write and nothing to skip
-when a repo is still empty. `/grill-me` is installed but deliberately unused: it runs `/grilling` alone, so it
-records nothing.
+The manual path still works: conversation -> `/to-spec` -> `/to-tickets` -> `/implement`
+
+Vocabulary and decisions settled in the conversation are recorded with `/domain-modeling` into `CONTEXT.md` and `docs/adr/` (`/conduct` does this as its first step), so they do not evaporate with the session. Those files are created lazily, so there is nothing to write and nothing to skip when a repo is still empty.
 
 `/implement` drives `/tdd` at pre-agreed seams: red -> green, one behaviour at a time, tested through the public interface rather than implementation details, one vertical slice per loop. It closes with `/code-review` before committing.
-
-### Before a large feature, when code is hard to test, or when structure has grown complex
-
-`/improve-codebase-architecture` -> pick a candidate -> `/grill-with-docs` or `/codebase-design` -> `/to-spec` -> `/to-tickets` -> `/implement`
-
-`/improve-codebase-architecture` is a survey: it explores the codebase and hands back candidates. It never rewrites code on its own. Only the candidate the user picks goes through the flow above.

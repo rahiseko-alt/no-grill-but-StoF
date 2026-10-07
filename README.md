@@ -8,26 +8,18 @@ Claude Code で開発を進めるための**テンプレート**です。ここ�
 会話を開いて、そのまま話しかけてください。何も打たなくても、AI が
 「前回の続き・いまの状態・最初の一手」を報告します。
 
-そのうえで、次の1つだけ打てば始まります。
+そのうえで、作りたいものを普段の言葉で話してください。AI が必要な点だけ尋ねて固めます。
 
-```
-/grill-with-docs
-```
-
-AI が質問を重ねて、作りたいものの曖昧な部分を潰します。答えるだけで構いません。
-決まった用語は `CONTEXT.md` に、重要な判断の理由は `docs/adr/` に書き残されるので、
-次の会話にも引き継がれます。
-
-相談が済んだら、次を打てば残りは任せられます。
+固まったら、次を打てば残りは任せられます。
 
 ```
 /conduct
 ```
 
-計画書づくりから実装・確認・修正までを、役割表（`.claude/router/roles.txt`）に従って
-Claude・GPT（Codex）・Gemini に振り分けて進めます。あなたが関わるのは、途中確認と最終確認で
-GO / NG を返すときだけです。3社の道具を使うには、先に一度だけ
-[Windows での初回準備](docs/setup-windows.md) を済ませてください（済ませていなくても、Claude だけで進みます）。
+決まった用語は `CONTEXT.md` に、重要な判断の理由は `docs/adr/` に書き残し、計画書づくりから
+実装・確認・修正までを Claude が進めます。あなたが関わるのは、途中確認と最終確認で
+GO / NG を返すときだけです。パソコンで動かす場合は、先に一度だけ
+[Windows での初回準備](docs/setup-windows.md) を済ませてください。
 
 複製した直後の最初の会話では、ひな型自身の作業日誌が自動で片づき、引き継ぎメモが白紙になります。
 
@@ -45,16 +37,15 @@ GO / NG を返すときだけです。3社の道具を使うには、先に一�
 
 ## 入っているもの
 
-- `.claude/skills/` に [mattpocock/skills](https://github.com/mattpocock/skills) を 12 個インストール
+- `.claude/skills/` に [mattpocock/skills](https://github.com/mattpocock/skills) を 8 個インストール
   （`npx skills add mattpocock/skills`、`skills-lock.json` でバージョン固定）
-  - ユーザー起動（このうち案内で使うもの）: `grill-with-docs` / `to-spec` / `to-tickets` / `implement` / `improve-codebase-architecture` / `setup-matt-pocock-skills`
-  - モデル起動: `grilling` / `domain-modeling` / `codebase-design` / `tdd` / `code-review`
+  - ユーザー起動（このうち案内で使うもの）: `to-spec` / `to-tickets` / `implement` / `setup-matt-pocock-skills`
+  - モデル起動: `domain-modeling` / `codebase-design` / `tdd` / `code-review`
 - `.claude/skills/s/`, `.claude/skills/f/`, `.claude/skills/next-step/`: この置き場所独自の案内役と儀式
-- `.claude/skills/conduct/`: 指揮の案内役。相談の後の全段階を、役割表に従って3社の道具に振り分けて進める
-- `.claude/router/`: 振り分け役（`route.sh`）と役割表（`roles.txt`）。モデルの乗り換えは役割表の書き換えだけで行う
+- `.claude/skills/conduct/`: 指揮の案内役。会話の後の全段階を Claude が自動で進める
 - `.claude/hooks/template-cleanup.sh`: 片づけ役。複製先の最初の会話で、ひな型の作業日誌を片づける
 - `.template/`: ひな型自身の記録（用語集・決めた理由など）。複製先では自動で消える
-- `tests/`: 振り分け役と片づけ役の検査。直したときに `sh tests/route.test.sh` と `sh tests/template-cleanup.test.sh` を流す
+- `tests/`: 片づけ役の検査。直したときに `sh tests/template-cleanup.test.sh` を流す
 - `docs/setup-windows.md`: Windows での初回準備の手引き
 - `.claude/settings.json`: 会話開始時に `docs/agents/flow-map.md` を読み込む仕組み
 - `docs/agents/flow-map.md`: 進め方と、説明の書き方のルール
@@ -65,9 +56,8 @@ GO / NG を返すときだけです。3社の道具を使うには、先に一�
 
 ## フロー全体
 
-- 新規開発・機能追加: `/grill-with-docs` → `/conduct`（あとは途中確認と最終確認で GO / NG を返すだけ）
-- 手で1段ずつ進める場合: `/grill-with-docs` → 必要に応じて `/to-spec` → `/to-tickets` → `/implement`
-- 設計改善: `/improve-codebase-architecture` → 候補を選択 → `/grill-with-docs` または `/codebase-design` → 以下同じ
+- 新規開発・機能追加: 会話で固める → `/conduct`（あとは途中確認と最終確認で GO / NG を返すだけ）
+- 手で1段ずつ進める場合: 会話で固める → `/to-spec` → `/to-tickets` → `/implement`
 
 `/implement` は `/tdd` で RED → GREEN を繰り返し、最後に `/code-review` を実行します。
 詳細は [AGENTS.md](./AGENTS.md) の「Development flow」を参照してください。

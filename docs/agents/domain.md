@@ -3,7 +3,7 @@
 How the engineering skills should consume this repo's domain documentation when exploring the codebase.
 
 **This binds regardless of how the work started.** The skills below (`to-spec`, `to-tickets`, `tdd`,
-`improve-codebase-architecture`) already read `CONTEXT.md`/`docs/adr/` because their own instructions say so.
+`conduct`) already read `CONTEXT.md`/`docs/adr/` because their own instructions say so.
 But `docs/agents/flow-map.md` lets the user skip the flow entirely ("そのまま作って") and write code directly —
 and when that happens, none of those skills run, so nothing else prompts this read. `flow-map.md` carries a
 rule pointing back here for exactly that case: before writing code outside the flow, read this page's
@@ -16,7 +16,7 @@ rule pointing back here for exactly that case: before writing code outside the f
 - **`docs/adr/`**: read ADRs that touch the area you're about to work in. In multi-context repos, also check `src/<context>/docs/adr/` for context-scoped decisions.
 - **`.template/`** (only in the template itself): the template's own `CONTEXT.md` and `docs/adr/` live here so they are not copied into new projects. Treat them exactly like the root ones, including pasting the ADRs into `/code-review`'s Standards prompt.
 
-If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill (reached via `/grill-with-docs` and `/improve-codebase-architecture`) creates them lazily when terms or decisions actually get resolved.
+If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The `/domain-modeling` skill (run as the first step of `/conduct`) creates them lazily when terms or decisions actually get resolved.
 
 ## File structure
 
